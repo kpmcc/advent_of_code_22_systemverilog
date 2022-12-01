@@ -6,10 +6,11 @@ from cocotb.triggers import RisingEdge
 from cocotb.result import TestSuccess, TestFailure
 
 @cocotb.test()
-async def part_one_(dut):
+async def part_one(dut):
 
 
-    input_file = "example_input.txt"
+    #input_file = "example_input.txt"
+    input_file = "actual_input.txt"
     with open(input_file, "r") as f:
         t = f.read()
 
@@ -37,11 +38,11 @@ async def part_one_(dut):
 
     # process inputs
     elf_foods = t.split('\n\n')
-    print(elf_foods)
+    #print(elf_foods)
     for e in elf_foods:
         items = e.strip()
         items = items.split('\n')
-        print(items)
+        #print(items)
         items = [int(i) for i in items]
 
         current_sum = 0
@@ -64,9 +65,11 @@ async def part_one_(dut):
     dut.read_max.value = 1
 
     await RisingEdge(dut.max_vld)
+    await RisingEdge(dut.clk)
     max_calories = int(dut.max_calories_sum.value)
 
     if max_calories == expected_max_calories:
+        print("Max calories: %d" % max_calories)
         raise TestSuccess()
     else:
         print("expected: %d - actual: %d" % (expected_max_calories, max_calories))
