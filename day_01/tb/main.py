@@ -38,6 +38,7 @@ async def part_one(dut):
 
     # process inputs
     elf_foods = t.split('\n\n')
+    top_3 = [0, 0, 0]
     #print(elf_foods)
     for e in elf_foods:
         items = e.strip()
@@ -59,6 +60,9 @@ async def part_one(dut):
         await RisingEdge(dut.clk)
         dut.store_sum.value = 0
 
+        top_3.append(current_sum)
+        top_3.sort()
+        top_3 = top_3[1:]
         expected_max_calories = max(expected_max_calories, current_sum)
 
     await RisingEdge(dut.clk)
@@ -67,10 +71,14 @@ async def part_one(dut):
     await RisingEdge(dut.max_vld)
     await RisingEdge(dut.clk)
     max_calories = int(dut.max_calories_sum.value)
+    max_calories_top_three_sum = int(dut.max_calories_top_three_sum.value)
+    expected_sum = sum(top_3)
 
-    if max_calories == expected_max_calories:
+    if max_calories == expected_max_calories and max_calories_top_three_sum == expected_sum:
         print("Max calories: %d" % max_calories)
+        print("Sum of top 3: %d" % max_calories_top_three_sum)
         raise TestSuccess()
     else:
-        print("expected: %d - actual: %d" % (expected_max_calories, max_calories))
+        print("expected max: %d - actual: %d" % (expected_max_calories, max_calories))
+        print("expected sum: %d - actual: %d" % (expected_sum, max_calories_top_three_sum))
         raise TestFailure()
