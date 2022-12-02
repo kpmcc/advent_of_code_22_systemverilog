@@ -9,8 +9,8 @@ from cocotb.result import TestSuccess, TestFailure
 async def part_one(dut):
 
 
-    input_file = "example_input.txt"
-    #input_file = "actual_input.txt"
+    #input_file = "example_input.txt"
+    input_file = "actual_input.txt"
     with open(input_file, "r") as f:
         t = f.read()
 

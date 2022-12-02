@@ -86,7 +86,7 @@ module top
          player_score_sum <= 0;
       end else begin
         if (player_item_delayed_vld && score_vld) begin
-          player_score_sum <= player_score_sum + player_score;
+          player_score_sum <= player_score_sum + player_score + player_item_delayed;
         end
       end
     end
@@ -109,5 +109,10 @@ module top
       eg_score_vld <= player_score_sum_vld;
       eg_score <= player_score_sum;
     end
+
+   initial begin
+      $dumpfile("dump.vcd");
+      $dumpvars(1, top);
+      end
 
   endmodule
