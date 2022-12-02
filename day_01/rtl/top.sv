@@ -68,9 +68,7 @@ module top
 
    // priority encoding of greater than signals
    logic[$clog2(NUM_MAXES)-1:0] cal_sum_gt_priority;
-
-
-   always_ff @ (posedge clk) begin
+   always_ff @ (*) begin
       cal_sum_gt_priority = 0;
       for (i=0;i<NUM_MAXES;i=i+1) begin
          if (sum_gt_cal_max[i]) begin
@@ -81,6 +79,7 @@ module top
 
 
    // TODO This isn't yet generalized to be parameterizable with NUM_MAXES
+   // Use priority encoding to shuffle maxes around
    always_ff @ (posedge clk) begin
       if (rst) begin
          calories_max[0] <= 0;
@@ -124,6 +123,7 @@ module top
       $dumpvars(1, top);
       for (i = 0; i < NUM_MAXES; i=i+1) begin
          $dumpvars(1, calories_max[i]);
+         $dumpvars(1, sum_gt_cal_max[i]);
          end
       end
 
